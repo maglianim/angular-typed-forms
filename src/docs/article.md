@@ -43,7 +43,7 @@ After the upgrade process we can see how our form declaration has been automatic
 
 >![Form untyped after angular 14 upgrade](./images/04000-form-untyped-after-ng-14-upgrade.png)
 
-In a similar way, if a form was previously created by means of the _FormBuilder_ helper class it is modified as well in order to maintain backward compatibility:
+In a similar way, the forms previously created by means of the _FormBuilder_ helper class are modified as well in order to maintain backward compatibility:
 
 >![Form group untyped after angular 14 upgrade](./images/04500-form-group-untyped-after-ng-14-upgrade.png)
 
