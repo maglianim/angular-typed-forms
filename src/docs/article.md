@@ -6,18 +6,17 @@ In this article we will take a look to the brand-new Angular's typed forms, ship
 
 Since the very first versions of Angular 2+, the framework has offered a programmatically support to form handling called *"Reactive Forms"*. With this approach, developers have had a declarative way to define a form model / validators in the code-side of a component and got a reactive-based support to observe form value / status transitions. Here is a basic reactive form declaration example:
 
-```typescript
-  ngOnInit(): void {
-    const recipeForm = new FormGroup({
-      name: new FormControl('', [Validators.required]),
-      author: new FormControl('', [Validators.required]),
-      isVegan: new FormControl(false),
-      cookingTime: new FormControl(0),
-      ingredients: new FormArray([]),
-    });
-  }
-```
-![Basic reactive form declaration](./images/01000-form-declaration.png)
+>```typescript
+>  ngOnInit(): void {
+>    const recipeForm = new FormGroup({
+>      name: new FormControl('', [Validators.required]),
+>      author: new FormControl('', [Validators.required]),
+>      isVegan: new FormControl(false),
+>      cookingTime: new FormControl(0),
+>      ingredients: new FormArray([]),
+>    });
+>  }
+>```
 
 ### Reactive forms: An untyped story
 
@@ -42,27 +41,52 @@ $ ng update @angular/cli@14
 
 After the upgrade process we can see how our form declaration has been automatically modified in order to keep the application working:
 
-![Form untyped after angular 14 upgrade](./images/04000-form-untyped-after-ng-14-upgrade.png)
+>![Form untyped after angular 14 upgrade](./images/04000-form-untyped-after-ng-14-upgrade.png)
 
 ## welcome to my (typed) world
 After having covered the upgrade process from an older version, we can now take a dive on how Angular Forms ecosystem has been improved to provide a full-typed developer experience.
 
 We start from the _FormControl_, the most basic part of a form:
 
-```typescript
-const recipeName = new FormControl('', [Validators.required]);
-```
+>```typescript
+>const recipeName = new FormControl('', [Validators.required]);
+>```
 As shown in the snippet, we have declared a form control giving an empty string as default value. Here is how typescript infers the value coming from the control: 
 
-![Typed form control](./images/05000-typed-form-control-value.png)
+>![Typed form control](./images/05000-typed-form-control-value.png)
 
 That is _string_ (the type of the given value) and _null_, since a control value is nullable by default unless other options are specified (see later paragraph for further information).
 
-Going forward, here is how recipe model is typed after changing its definition to a typed _FormGroup_:
+Going forward, let's check out how recipe model is typed after changing its definition to a typed _FormGroup_. We can now remove the _Untyped_ class reference and restore the original recipe form:
 
-```typescript
+>```typescript
+>  ngOnInit(): void {
+>    const recipeForm = new FormGroup({
+>      name: new FormControl('', [Validators.required]),
+>      author: new FormControl('', [Validators.required]),
+>      isVegan: new FormControl(false),
+>      cookingTime: new FormControl(0),
+>      ingredients: new FormArray([]),
+>    });
+>
+>    const recipeFormValue = recipeForm.value;
+>  }
+>```
 
-```
+This is how the form value is inferred:
+
+>![Typed form group value](./images/06000-typed-form-group-value.png)
+
+We can see that each property of the resulting object reflects the information given inside its corresponding _FormControl_; Furthermore, it is no longer possible to write typos or set invalid value, as typescript compilation would break: 
+
+>![Form set invalid property](./images/07000-typed-form-set-invalid-value.png)
+
+>![Form set invalid value](./images/08000-typed-form-set-invalid-property.png)
+
+In this way we can prevent possible runtime errors saving a lot of headaches.
+
+
+
 
 
 ---
@@ -82,3 +106,7 @@ _description of the process of incremental conversion of a form_
 
 ### New feature: FormRecord - TODO
 _Show use case and the difference with standard formGroup._
+
+
+## Conclusion - TODO
+_Angular typed forms is a feature which the community awaited for long and now that is landed..._
