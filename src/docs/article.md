@@ -6,9 +6,20 @@ In this article we will take a look to the brand-new Angular's typed forms, ship
 
 Since the very first versions of Angular 2+, the framework has offered a programmatically support to form handling called *"Reactive Forms"*. With this approach, developers have had a declarative way to define a form model / validators in the code-side of a component and got a reactive-based support to observe form value / status transitions. Here is a basic reactive form declaration example:
 
+```typescript
+  ngOnInit(): void {
+    const recipeForm = new FormGroup({
+      name: new FormControl('', [Validators.required]),
+      author: new FormControl('', [Validators.required]),
+      isVegan: new FormControl(false),
+      cookingTime: new FormControl(0),
+      ingredients: new FormArray([]),
+    });
+  }
+```
 ![Basic reactive form declaration](./images/01000-form-declaration.png)
 
-## Reactive forms: An untyped story
+### Reactive forms: An untyped story
 
 Despite its powerful APIs, reactive forms have always been poorly typed. As we can see, the internal model is resolved to a generic untyped map of key-value pairs:
 
@@ -18,17 +29,56 @@ Furthermore, it is possible to set invalid values or access non-existent propert
 
 ![Form untyped forms with no compiler errors](./images/03000-form-untyped-no-errors.png)
 
-This lack of constraints is dangerous and error-prone, especially in a real-world scenario where forms are big and distributed across a wide range of components; furthermore the codebase is maintained by many developers so the possibility of a typo in a model property or the assignment of a wrong value is very high and can lead to errors.
+This lack of constraints is dangerous and error-prone, especially in a real-world scenario where forms are big and referenced across a wide range of components; furthermore the codebase is often maintained by many developers and the possibility write a typo in a model property or to assign of a wrong value is very high and can lead to errors.
 
-## ng@14: Types to the rescue!
+### ng@14: Types to the rescue!
 
-Angular typed forms support has been the top #1 feature request for a long time and finally landed with version 14 of the framework. It worth to be said that such feature is also a breaking change because _FormGroup_, _FormArray_ and _FormControl_, that were untyped in older versions, have changed their behavior in order to be strictly typed. Fortunately, Angular guys made an excellent job to guarantee a seamless upgrade by running an automatic migration of the legacy forms to the brand new classes _UntypedFormGroup_, _UntypedFormArray_ and _UntypedFormControl_.
+The situation described in the previous paragraph made the Angular typed forms support the top #1 feature request and so remained for a long time, until it finally landed with version 14 of the framework. It worth to be said that such feature is also a breaking change because _FormGroup_, _FormArray_ and _FormControl_, that were untyped in older versions, have changed their behavior in order to be strictly typed. Fortunately, Angular guys made an excellent job to guarantee a seamless upgrade by running an automatic migration of the legacy forms to the brand new classes _UntypedFormGroup_, _UntypedFormArray_ and _UntypedFormControl_.
 
 The upgrade of angular is as simple as the following command:
 ```sh
 $ ng update @angular/cli@14
 ```
 
-After the upgrade process, we can see how our form declaration has been automatically modified:
+After the upgrade process we can see how our form declaration has been automatically modified in order to keep the application working:
 
 ![Form untyped after angular 14 upgrade](./images/04000-form-untyped-after-ng-14-upgrade.png)
+
+## welcome to my (typed) world
+After having covered the upgrade process from an older version, we can now take a dive on how Angular Forms ecosystem has been improved to provide a full-typed developer experience.
+
+We start from the _FormControl_, the most basic part of a form:
+
+```typescript
+const recipeName = new FormControl('', [Validators.required]);
+```
+As shown in the snippet, we have declared a form control giving an empty string as default value. Here is how typescript infers the value coming from the control: 
+
+![Typed form control](./images/05000-typed-form-control-value.png)
+
+That is _string_ (the type of the given value) and _null_, since a control value is nullable by default unless other options are specified (see later paragraph for further information).
+
+Going forward, here is how recipe model is typed after changing its definition to a typed _FormGroup_:
+
+```typescript
+
+```
+
+
+---
+---
+---
+
+_description of the form after the full process of migration with both formGroup and formBuilder and how angular leverages typescript's type inference._
+
+### Form declaration: a common oversight - TODO
+_description of the type loss when a typed form is wrongly declared (show untyped, inline-typed, custom type)._
+
+### Nullability management - TODO
+_description of the three ways to declare manage nullability of a form field._
+
+### Upgrade at your own pace - TODO
+_description of the process of incremental conversion of a form_
+
+### New feature: FormRecord - TODO
+_Show use case and the difference with standard formGroup._
