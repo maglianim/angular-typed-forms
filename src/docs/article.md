@@ -20,3 +20,15 @@ Furthermore, it is possible to set invalid values or access non-existent propert
 
 This lack of constraints is dangerous and error-prone, especially in a real-world scenario where forms are big and distributed across a wide range of components; furthermore the codebase is maintained by many developers so the possibility of a typo in a model property or the assignment of a wrong value is very high and can lead to errors.
 
+## ng@14: Types to the rescue!
+
+Angular typed forms support has been the top #1 feature request for a long time and finally landed with version 14 of the framework. It worth to be said that such feature is also a breaking change because _FormGroup_, _FormArray_ and _FormControl_, that were untyped in older versions, have changed their behavior in order to be strictly typed. Fortunately, Angular guys made an excellent job to guarantee a seamless upgrade by running an automatic migration of the legacy forms to the brand new classes _UntypedFormGroup_, _UntypedFormArray_ and _UntypedFormControl_.
+
+The upgrade of angular is as simple as the following command:
+```sh
+$ ng update @angular/cli@14
+```
+
+After the upgrade process, we can see how our form declaration has been automatically modified:
+
+![Form untyped after angular 14 upgrade](./images/04000-form-untyped-after-ng-14-upgrade.png)
