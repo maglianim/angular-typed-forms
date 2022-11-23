@@ -102,15 +102,64 @@ Finally, let's see the resulting value given by a _FormArray_: For example we ar
 
 and here is how the type of resulting value is resolved:
 
->![Form set invalid value](./images/09000-typed-form-array.png)
+>![Typed form array](./images/09000-typed-form-array.png)
 
 That corresponds exactly the type defined inside the ingredients _FormArray_.
 
+### Nullability management
+
+As stated in a previous chapter, each form control is nullable by default. It means that in a strictly typed typescript environment it can only assume a value compatible with the declared type or _null_. For example, our _recipeControl_ declared as nullable string:
+
+>```typescript
+>const recipeName = new FormControl('', [Validators.required]);
+>```
+
+can only accept a _string_ or _null_:
+
+>![Nullable control allowed types](./images/10000-nullable-control-allowed-values.png)
+
+Also, the null value is assigned to the control when calling _reset_ (if no explicit value is passed to the method):
+
+>```typescript
+>    // ❗this assigns the null value
+>    recipeName.reset();
+>```
+
+There are two possible ways to make a control non-nullable, it's up to the developer to choose the best depending on the specific use case. Here is the available choices:
+
+1. Setting explicitly _nonNullable_ attribute inside the control definition options:
+
+>```typescript
+>    const recipeName = new FormControl('', { nonNullable: true, validators: [Validators.required] });
+>```
+
+this produce a more strict value type, removing _null_ from the possible assignable values:
+
+>![Nullable control allowed types](./images/11000-non-nullable-control-allowed-values.png)
 
 
+2. using _NonNullableFormBuilder_:
 
+When handling with large non-nullable forms it could be pretty much boilerplate to specify non-nullable condition for every single control. Fot this reason, the form builder has a new property called _nonNullable_ that exposes an instance of _NonNullableFormControl_, that is an helper class that builds _FormGroups_ and _FormControls_ non-nullable by default:
 
+>```typescript
+>   buildForm(fb: FormBuilder) {
+>      const recipeForm = fb.nonNullable.group({
+>       ...controls
+>      });
+>   }
+>```
 
+>```typescript
+>   buildForm(fb: FormBuilder) {
+>      const recipeForm = fb.group({
+>       name: fb.nonNullable.control(''),
+>       ...other controls
+>      });
+>   }
+>```
+
+Whatever strategy is used, 
 
 
 ---
@@ -120,9 +169,6 @@ That corresponds exactly the type defined inside the ingredients _FormArray_.
 
 ### Form declaration: a common oversight - TODO
 _description of the type loss when a typed form is wrongly declared (show untyped, inline-typed, custom type)._
-
-### Nullability management - TODO
-_description of the three ways to declare manage nullability of a form field._
 
 ### Upgrade at your own pace - TODO
 _description of the process of incremental conversion of a form_
