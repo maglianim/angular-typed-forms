@@ -127,40 +127,35 @@ Also, the null value is assigned to the control when calling _reset_ (if no expl
 
 There are two possible ways to make a control non-nullable, it's up to the developer to choose the best depending on the specific use case. Here is the available choices:
 
-1. Setting explicitly _nonNullable_ attribute inside the control definition options:
-
+- Setting explicitly _nonNullable_ attribute inside the control definition options:
 >```typescript
 >    const recipeName = new FormControl('', { nonNullable: true, validators: [Validators.required] });
 >```
-
 this produce a more strict value type, removing _null_ from the possible assignable values:
-
 >![Nullable control allowed types](./images/11000-non-nullable-control-allowed-values.png)
 
 
-2. using _NonNullableFormBuilder_:
-
-When handling with large non-nullable forms it could be pretty much boilerplate to specify non-nullable condition for every single control. Fot this reason, the form builder has a new property called _nonNullable_ that exposes an instance of _NonNullableFormControl_, that is an helper class that builds _FormGroups_ and _FormControls_ non-nullable by default:
-
+- using _NonNullableFormBuilder_:
+When handling with large non-nullable forms it could be pretty much boilerplate to specify non-nullable condition for every single control. For this reason, the form builder has a new property called _nonNullable_ that exposes an instance of _NonNullableFormControl_, that is an helper class that builds _FormControls_ and _FormGroups_ non-nullable by default:
 >```typescript
 >   buildForm(fb: FormBuilder) {
->      // 🔥 Every control of this form is non-nullable  
+>      const recipeForm = fb.group({
+>      // name control is not nullable
+>       name: fb.nonNullable.control(''),
+>       ...other controls
+>      });
+>   }
+>   // OR
+>   buildForm(fb: FormBuilder) {
+>      // 🔥 Every control of this form group is non-nullable  
 >      const recipeForm = fb.nonNullable.group({
 >       ...controls
 >      });
 >   }
 >```
 
->```typescript
->   buildForm(fb: FormBuilder) {
->      const recipeForm = fb.group({
->       name: fb.nonNullable.control(''),
->       ...other controls
->      });
->   }
->```
 
-Whatever strategy is used, 
+When a readonly control is reset (without supplying any explicit value), it's initial value is assigned instead of null. The initial value is the one specified along the control's declaration (for example our _recipeForm.name_ has an empty string as its initial value).
 
 
 ---
