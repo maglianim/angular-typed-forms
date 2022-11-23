@@ -22,15 +22,15 @@ https://offering.solutions/blog/articles/2022/07/09/getting-started-with-angular
 
 ======================
 
-- Before ng14: no type support
-- From ng14 opt-in (BREAKING CHANGE)
-    to opt out legacy form use UntypedFormGroup / UntypedFormControl / UntypedFormArray / UntypedFormBuilder
-- Incremental conversion from untyped to typed
-- declaration (FormGroup vs FormBuilder)
-- Nullability: { nonNullable: true } vs fb.nonNullable.control vs notNullableFb.control
-- common pitfall : untyped FormGroup loses type inference
-    - mostrare caso
-    - mostrare dichiarazione tipizzata
-    - mostrare dichiarazione tipizzata con tipo al seguito
-- NEW: FormGroup vs FormRecord
+- [x] Before ng14: no type support
+- [x] From ng14 opt-in (BREAKING CHANGE)
+    [x] to opt out with legacy form use UntypedFormGroup / UntypedFormControl / UntypedFormArray / UntypedFormBuilder
+- [x] Incremental conversion from untyped to typed
+- [ ] declaration (FormGroup vs FormBuilder)
+- [ ] Nullability: { nonNullable: true } vs fb.nonNullable.control vs notNullableFb.control
+- [ ] common pitfall : untyped FormGroup loses type inference
+    - [ ] mostrare caso
+    - [ ] mostrare dichiarazione tipizzata
+    - [ ] mostrare dichiarazione tipizzata con tipo al seguito
+- [ ] NEW: FormGroup vs FormRecord
 
