@@ -2,6 +2,8 @@
 
 In this article we will take a look to the brand-new Angular's typed forms, shipped with version 14 of the framework. We will walk first through the problems encountered with untyped forms, then we'll se how the angular team have been addressed such problems and defined a path to guide developers towards a fully-typed forms management.
 
+Please also check out the official [angular typed forms](https://angular.io/guide/typed-forms) documentation page.
+
 ## A bit of history
 
 Since the very first versions of Angular 2+, the framework has offered a programmatically support to form handling called *"Reactive Forms"*. With this approach, developers have had a declarative way to define a form model and validators in the code-side of a component and got a reactive-based support to observe form value / status transitions. Here is a basic reactive form declaration example:
@@ -32,7 +34,7 @@ This lack of constraints is dangerous and error-prone, especially in a real-worl
 
 ### ng@14: Types to the rescue!
 
-The situation described in the previous paragraph made the Angular typed forms support the top #1 feature request and so remained for a long time, until it finally landed with version 14 of the framework. It is worth saying that such feature is also a breaking change because _FormGroup_, _FormArray_ and _FormControl_, that were untyped in older versions, have changed their behavior in order to be strictly typed. Fortunately, Angular guys made an excellent job to guarantee a seamless upgrade by running an automatic migration of the legacy forms to the brand new classes _UntypedFormGroup_, _UntypedFormArray_ and _UntypedFormControl_ (and _UntypedFormBuilder_ helper class).
+Because of the situation described in the previous paragraph, the request for Angular typed forms support was the top #1 feature request for a long time, until it finally landed with version 14 of the framework. It is worth saying that such feature is also a breaking change because _FormGroup_, _FormArray_ and _FormControl_, that were untyped in older versions, have changed their behavior in order to be strictly typed. Fortunately, Angular guys made an excellent job to guarantee a seamless upgrade by running an automatic migration of the legacy forms to the brand new classes _UntypedFormGroup_, _UntypedFormArray_ and _UntypedFormControl_ (and _UntypedFormBuilder_ helper class).
 
 The upgrade of angular is as simple as the following command:
 ```sh
@@ -46,6 +48,8 @@ After the upgrade process we can see how our form declaration has been automatic
 In a similar way, the forms previously created by means of the _FormBuilder_ helper class are modified as well in order to maintain backward compatibility:
 
 >![Form group untyped after angular 14 upgrade](./images/04500-form-group-untyped-after-ng-14-upgrade.png)
+
+In this situation, any developer has the possibility to install the latest angular version without breaking anything and plan in a later moment a gradual conversion of the application to the new typed form ecosystem.
 
 ## welcome to my (typed) world
 After having covered the upgrade process from an older version, we can now take a dive on how Angular Forms ecosystem has been improved to provide a fully-typed developer experience.
@@ -136,7 +140,7 @@ this produce a more strict value type, removing _null_ from the possible assigna
 
 
 - using _NonNullableFormBuilder_:
-When handling with large non-nullable forms it could be pretty much boilerplate to specify non-nullable condition for every single control. For this reason, the form builder has a new property called _nonNullable_ that exposes an instance of _NonNullableFormControl_, that is an helper class that builds _FormControls_ and _FormGroups_ non-nullable by default:
+When handling with large non-nullable forms it could be pretty much boilerplate to specify non-nullable condition for every single control. For this reason, the form builder has a new property called _nonNullable_ that exposes an instance of _NonNullableFormControl_, that is a helper class that builds _FormControls_ and _FormGroups_ non-nullable by default:
 >```typescript
 >   buildForm(fb: FormBuilder) {
 >      const recipeForm = fb.group({
@@ -157,20 +161,12 @@ When handling with large non-nullable forms it could be pretty much boilerplate 
 
 When a readonly control is reset (without supplying any explicit value), it's initial value is assigned instead of null. The initial value is the one specified along the control's declaration (for example our _recipeForm.name_ has an empty string as its initial value).
 
-
----
----
----
-
-
-### Form declaration: a common oversight - TODO
-_description of the type loss when a typed form is wrongly declared (show untyped, inline-typed, custom type)._
-
-### Upgrade at your own pace - TODO
-_description of the process of incremental conversion of a form_
-
-### New feature: FormRecord - TODO
+### New feature: FormRecord
+In addition to the _FormControl_, _FormGroup_ and _FormArray_ class, the form ecosystem's api has provided a brand new class called _FormRecord_.
 _Show use case and the difference with standard formGroup._
+
+### Form declaration: be careful with the type you choose - TODO
+_description of the type loss when a typed form is wrongly declared (show untyped, inline-typed, custom type)._
 
 
 ## Conclusion - TODO

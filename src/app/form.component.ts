@@ -41,5 +41,5 @@ export class FormComponent {
     {text: 'Two', cols: 2, rows: 1, color: 'lightgreen'},
     {text: 'Three', cols: 2, rows: 1, color: 'lightblue'},
     {text: 'Four', cols: 2, rows: 1, color: 'lightgreen'},
-  ];  
+  ]; 
 }
