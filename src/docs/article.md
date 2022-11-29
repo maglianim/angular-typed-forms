@@ -161,13 +161,80 @@ When handling with large non-nullable forms it could be pretty much boilerplate 
 
 When a readonly control is reset (without supplying any explicit value), it's initial value is assigned instead of null. The initial value is the one specified along the control's declaration (for example our _recipeForm.name_ has an empty string as its initial value).
 
-### New feature: FormRecord
-In addition to the _FormControl_, _FormGroup_ and _FormArray_ class, the form ecosystem's api has provided a brand new class called _FormRecord_.
-_Show use case and the difference with standard formGroup._
+### Dynamic forms and FormRecord
+Sometimes depending on specific feature requirements, there is the need to add or remove controls dynamically.
+In a _FormGroup_ this can be accomplished by means of optional fields; Let's take a look to the following example:
 
-### Form declaration: be careful with the type you choose - TODO
-_description of the type loss when a typed form is wrongly declared (show untyped, inline-typed, custom type)._
+>```typescript
+> export interface Recipe = {
+>   name: string;
+>   author?: string;
+>   isVegan?: boolean;
+>   cookingTime?: number;
+> }
+> 
+> const recipeForm = new FormGroup<Recipe>({
+>     name: new FormControl('', {nonNullable: true}),
+> });
+>```
 
+Here we declared _recipeForm_ which has only the _name_ property; The other properties are marked as optional in the underlying _Recipe_ type so they can be initially omitted.
 
-## Conclusion - TODO
-_Angular typed forms is a feature which the community awaited for long and now that is landed..._
+If we need to add or remove an optional control later in the time, we can do it with the following instructions:
+
+>```typescript
+>// adds the optional control to the form
+>recipeForm.addControl('author', new FormControl('', { nonNullable: true }));
+>
+>// removes the optional control from the form
+>recipeForm.removeControl('author');
+>
+>```
+
+However this works only if the adding key is inside the boundaries of the _Recipe_ type. As we can se from the following example, adding an extraneous key would break the compilation:
+
+>```typescript
+>// ⛔ Error: Argument of type '"random_key"' is not assignable to parameter of type '"name"' | '"author"' | '"isVegan"' | '"cookingTime"'
+>
+>recipeForm.addControl('randomKey', new FormControl('', { nonNullable: true }));
+>```
+
+For this reason a new class has been introduced into the form's ecosystem: _FormRecord_. It extends _FormGroup_ in order to handle a dynamic set of homogeneous _Controls_ whose keys are not known in advance.
+
+In the following example we can see the declaration of a _FormRecord_ made of string controls:
+
+>```typescript
+>// declaring an empty form record made of string controls
+>const formRecord = new FormRecord<FormControl<string>>({});
+>
+>// ✅ adding a new string form control for the key "aRandomProp"
+>formRecord.addControl('aRandomProp', new FormControl('aRandomProp-value', { nonNullable: true }));
+>
+>// ✅ adding another string form control for the key "anotherRandomProp"
+>formRecord.addControl('anotherRandomProp', new FormControl('anotherRandomProp-value', { nonNullable: true }));
+>
+>// ⛔ error adding another Date control: only string controls allowed
+>formRecord.addControl('dateProperty', new FormControl(new Date(), { nonNullable: true }));
+>```
+
+Here we can see how there are no constraints on the name of the given properties, but all of them must be of the same type (in our example _FormControl\<string\>_ ).
+
+Our _formRecord_ produces a map value according with the provided keys and values:
+
+>```typescript
+>const formRecord = new FormRecord<FormControl<string>>({});
+>
+>formRecord.addControl('propOne', new FormControl('propOne-value', { nonNullable: true }));
+>formRecord.addControl('propTwo', new FormControl('propTwo-value', { nonNullable: true }));
+>
+>console.log(formRecord.value);
+>
+>// Here is how it is logged to the console:
+>// {
+>//     propOne: 'propOne-value',
+>//     propTwo: 'propTwo-value'
+>// }
+>```
+
+## Conclusion
+In this article we had an overview of the new angular strictly-typed forms. We learnt how to leverage them in order to have a fully typed developer experience and how the framework has extended its APIs in order to support previously uncovered use cases. We also saw how it is possible to adopt them in a legacy codebase as older forms migration can be done in a gradual and self-paced way.

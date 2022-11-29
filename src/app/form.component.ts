@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MatGridListModule} from '@angular/material/grid-list';
+import { logFormTests } from './test';
 
 export interface Tile {
   color: string;
@@ -42,4 +43,8 @@ export class FormComponent {
     {text: 'Three', cols: 2, rows: 1, color: 'lightblue'},
     {text: 'Four', cols: 2, rows: 1, color: 'lightgreen'},
   ]; 
+
+  constructor() {
+    logFormTests();
+  }
 }
