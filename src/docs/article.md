@@ -237,4 +237,4 @@ Our _formRecord_ produces a map value according with the provided keys and value
 >```
 
 ## Conclusion
-In this article we had an overview of the new angular strictly-typed forms. We learnt how to leverage them in order to have a fully typed developer experience and how the framework has extended its APIs in order to support previously uncovered use cases. We also saw how it is possible to adopt them in a legacy codebase as older forms migration can be done in a gradual and self-paced way.
+Angular form typed forms is a powerful enhancement that allows developers to spot bug earlier an increase productivity. In this article we had an overview; We learnt how to leverage them in order to have a fully typed developer experience and how the framework has extended its APIs in order to support previously uncovered use cases. We also saw how it is possible to adopt them in a legacy codebase as older forms migration can be done in a gradual and self-paced way.
